@@ -371,16 +371,41 @@ ul{color:var(--color-text-secondary)}
   .topbar__progress{display:none}
 }
 @media print{
-  body{background:#fff;font-size:10.5pt}
+  @page{margin:14mm 12mm}
+  html,body{background:#fff}
+  body{font-size:10pt;line-height:1.45}
   .topbar,.sidebar,.print-btn,.filter,.skip-link{display:none!important}
   .app-shell{display:block}
-  .main-inner{max-width:none;padding:0}
-  .hero{page-break-after:always;border-bottom:none}
-  section{page-break-inside:avoid;margin-bottom:var(--sp-6)}
-  .fea,.wf,.br,.dia,.tw,.card,.note,.area{page-break-inside:avoid;box-shadow:none}
-  h2,h3,h4{page-break-after:avoid}
-  a{color:inherit;text-decoration:none}
+  .main,.main-inner{display:block;max-width:none;padding:0;margin:0}
+
+  /* Sections run to many pages. Asking the browser to keep one whole is
+     impossible to honour, and it responds by pushing the whole section to a
+     fresh page and leaving the rest of the current page blank. Let them flow. */
+  section{break-inside:auto;page-break-inside:auto;margin:0 0 20px}
+  .grid,.brs,.areas,.stats,.leg,.chips,.tabs,.fea-bd,.eps{break-inside:auto;page-break-inside:auto}
+
+  .hero{break-after:page;page-break-after:always;border-bottom:none;padding:0 0 10px;margin:0}
+
+  /* Keep genuinely small blocks intact */
+  .fea,.wf,.br,.card,.note,.area,.stat,.dia,.tw,.pipe-step,.gloss div,.leg div,.fea-blk{
+    break-inside:avoid;page-break-inside:avoid;box-shadow:none}
+  tr,img,svg{break-inside:avoid;page-break-inside:avoid}
+  thead{display:table-header-group}
+
+  /* A heading must never be the last thing on a page */
+  h2,h3,h4,h5,.sec-num,.wf-hd,.fea-hd,.br-hd{break-after:avoid;page-break-after:avoid}
+  h2,h3,h4,h5{break-inside:avoid;page-break-inside:avoid}
+  p,li,td{orphans:3;widows:3}
+
+  /* Scroll containers clip their overflow on paper - let everything show */
+  .tw,.dia,.pipe,.fea{overflow:visible!important}
+  .dia svg,.dia.wide svg{min-width:0!important;width:100%;height:auto}
+  .pipe{flex-wrap:wrap;gap:10px}
+  .pipe-step{margin-right:0;flex:1 1 30%;min-width:150px}
+  .pipe-step::after{display:none}
+
   .gloss{columns:2}
+  a{color:inherit;text-decoration:none}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 .print-btn{position:fixed;right:var(--sp-5);bottom:var(--sp-5);z-index:50;background:var(--color-accent);
